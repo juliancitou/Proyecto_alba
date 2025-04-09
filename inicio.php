@@ -10,15 +10,18 @@ $isAdmin = $_SESSION["admin"];
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Inicio</title>
 </head>
+
 <body>
-    <h1>Bienvenido</h1>
+    <h1>Bienvenidos</h1>
     <?php if ($isAdmin) { ?>
-        <a href="administrar.php">Administrar Usuarios</a>
+    <a href="administrar.php">Administrar Usuarios</a>
     <?php } ?>
     <a href="logout.php">Cerrar Sesión</a>
 </body>
+
 </html>
