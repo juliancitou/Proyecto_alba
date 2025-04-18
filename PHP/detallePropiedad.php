@@ -26,10 +26,12 @@ if (!$propiedad) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Detalle de la Propiedad</title>
 </head>
+
 <body>
     <h1>Detalle de la Propiedad</h1>
 
@@ -54,12 +56,15 @@ if (!$propiedad) {
 
             <!-- Botón Comprar -->
             <form method="POST" action="comprarPropiedad.php">
-                <input type="hidden" name="id_propiedad" value="<?php echo htmlspecialchars($propiedad['id_propiedad']); ?>">
+                <input type="hidden" name="id_propiedad"
+                    value="<?php echo htmlspecialchars($propiedad['id_propiedad']); ?>">
                 <input type="hidden" name="precio" value="<?php echo htmlspecialchars($propiedad['precio']); ?>">
-                <input type="hidden" name="empresa_rfc" value="<?php echo htmlspecialchars($propiedad['empresa_rfc']); ?>">
+                <input type="hidden" name="empresa_rfc"
+                    value="<?php echo htmlspecialchars($propiedad['empresa_rfc']); ?>">
                 <button type="submit">Comprar</button>
             </form>
         </div>
     </div>
 </body>
+
 </html>

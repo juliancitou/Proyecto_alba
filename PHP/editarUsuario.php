@@ -44,10 +44,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Editar Usuario</title>
 </head>
+
 <body>
     <h1>Editar Usuario</h1>
     <form method="POST">
@@ -61,4 +63,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <input type="submit" value="Actualizar">
     </form>
 </body>
+
 </html>

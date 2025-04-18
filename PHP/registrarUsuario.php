@@ -1,36 +1,51 @@
 <?php
-session_start();
-include_once "base_de_datos.php";
+include_once "base_de_datos.php"; // Conexión a la base de datos
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Recoger los datos del formulario
+    $nombre = $_POST["nombre"];
+    $apellidos = $_POST["apellidos"];
+    $telefono = $_POST["telefono"];
+    $edad = $_POST["edad"];
     $correo = $_POST["correo"];
-    $password = $_POST["password"];
+    $direccion = $_POST["direccion"];
+    $curp = $_POST["curp"];
+    $contrasena = password_hash($_POST["password"], PASSWORD_BCRYPT); 
+    $rol = 'comprador'; // Valor por defecto, puede ser 'admin' o 'vendedor' según se necesite
 
-    // Buscar en usuarios
-    $sqlUsuarios = "SELECT * FROM usuarios WHERE correo = :correo";
-    $stmtUsuarios = $pdo->prepare($sqlUsuarios);
-    $stmtUsuarios->execute([":correo" => $correo]);
-    $usuario = $stmtUsuarios->fetch(PDO::FETCH_ASSOC);
+    // Consulta para insertar los datos en la tabla `usuarios`
+    $sql = "INSERT INTO usuarios (nombre, apellidos, telefono, edad, correo, direccion, curp, contrasena, rol)
+            VALUES (:nombre, :apellidos, :telefono, :edad, :correo, :direccion, :curp, :contrasena, :rol)";
 
-    if (!$usuario) {
-        $sqlEmpresas = "SELECT rfc, nombre, correo, direccion, password FROM empresas WHERE correo = :correo";
-        $stmtEmpresas = $pdo->prepare($sqlEmpresas);
-        $stmtEmpresas->execute([":correo" => $correo]);
-        $usuario = $stmtEmpresas->fetch(PDO::FETCH_ASSOC);
-        $tipo = "empresa";
-    } else {
-        $tipo = "usuario";
+    // Preparar la consulta
+    $stmt = $pdo->prepare($sql);
+    if (!$stmt) {
+        die("Error al preparar la consulta: " . implode(", ", $pdo->errorInfo()));
     }
-    
-    // Validar contraseña
-    if ($usuario && password_verify($password, $usuario["password"])) {
-        $_SESSION["usuario"] = $usuario;
-        $_SESSION["tipo"] = $tipo;
 
-        header("Location: bienvenida.php");
-        exit();
-    } else {
-        echo "<div class='error'>Credenciales incorrectas.</div>";
+    // Ejecutar la consulta
+    try {
+        $stmt->execute([
+            ":nombre" => $nombre,
+            ":apellidos" => $apellidos,
+            ":telefono" => $telefono,
+            ":edad" => $edad,
+            ":correo" => $correo,
+            ":direccion" => $direccion,
+            ":curp" => $curp,
+            ":contrasena" => $contrasena,
+            ":rol" => $rol
+        ]);
+
+        // Verificar si la ejecución fue exitosa
+        if ($stmt->rowCount() > 0) {
+            header("Location: login.php?registro=exitoso");
+            exit();
+        } else {
+            echo "Error al registrar el usuario.";
+        }
+    } catch (PDOException $e) {
+        die("Error en la base de datos: " . $e->getMessage());
     }
 }
 ?>
@@ -41,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
+    <title>Registrar Usuario</title>
     <style>
         /* Estilos globales */
         body {
@@ -84,6 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         /* Campos de entrada */
+        input[type="text"],
         input[type="email"],
         input[type="password"] {
             width: 100%;
@@ -98,13 +114,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             margin-bottom: 20px; /* Espaciado entre campos */
         }
 
+        input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="password"]:focus {
             border-color: #52D5F2;
             box-shadow: 0px 0px 5px #52D5F2;
         }
 
-        /* Botón de inicio de sesión */
+        /* Botón de registrar */
         input[type="submit"] {
             width: 100%;
             padding: 14px;
@@ -158,25 +175,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 
 <body>
-
-    
+    <a href="../PHP/login.php" class="btn-regresar">Volver</a>
 
     <div class="container">
-        <h1>Iniciar Sesión</h1>
-        <form method="POST" action="login.php">
-            <input type="email" name="correo" placeholder="Correo" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
-            <input type="submit" value="Iniciar Sesión">
+        <h1>Registrar Usuario</h1>
+        <form method="POST" action="registrarUsuario.php">
+            <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
+            <input type="text" id="apellidos" name="apellidos" placeholder="Apellidos" required>
+            <input type="text" id="telefono" name="telefono" placeholder="Teléfono" required>
+            <input type="text" id="edad" name="edad" placeholder="Edad" required>
+            <input type="email" id="correo" name="correo" placeholder="Correo" required>
+            <input type="text" id="direccion" name="direccion" placeholder="Dirección" required>
+            <input type="text" id="curp" name="curp" placeholder="CURP" maxlength="18" required>
+            <input type="password" id="password" name="password" placeholder="Contraseña" required>
+            <input type="submit" value="Registrar">
         </form>
 
         <hr>
-        <h2>¿No tienes una cuenta?</h2>
-        <form method="GET" action="seleccionarRegistro.php">
-            <input type="submit" value="Registrarse">
+        <h2>¿Ya tienes cuenta?</h2>
+        <form method="GET" action="login.php">
+            <input type="submit" value="Iniciar sesión">
         </form>
     </div>
 </body>
 
 </html>
-
-
