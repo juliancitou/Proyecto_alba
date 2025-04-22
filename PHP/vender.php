@@ -26,8 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores['sesion'] = 'Debes iniciar sesión para publicar una propiedad.';
     }
 
+    if (!isset($_FILES['imagenes']) || count(array_filter($_FILES['imagenes']['name'])) < 5) {
+        $errores['imagenes'] = 'Debes subir al menos 5 imágenes.';
+    }
+
     if (empty($errores)) {
         require_once 'base_de_datos.php';
+
+        // Insertar propiedad
         $stmt = $pdo->prepare("INSERT INTO propiedades (tipo_propiedad, id_vendedor, direccion, pais, estado, municipio, metros_cuadrados, descripcion, precio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $datos['tipo_propiedad'],
@@ -41,11 +47,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $datos['precio']
         ]);
 
+        $id_propiedad = $pdo->lastInsertId();
+
+        $directorio = "../imagenes_propiedades/$id_propiedad";
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0777, true);
+        }
+
+        // Guardar imágenes y registrar en la tabla imagenes_propiedad
+        $stmtImagen = $pdo->prepare("INSERT INTO imagenes_propiedad (id_propiedad, ruta_imagen) VALUES (?, ?)");
+
+        foreach ($_FILES['imagenes']['tmp_name'] as $index => $tmpName) {
+            if ($_FILES['imagenes']['error'][$index] === UPLOAD_ERR_OK) {
+                $nombreArchivo = basename($_FILES['imagenes']['name'][$index]);
+                $rutaRelativa = "imagenes_propiedades/$id_propiedad/$nombreArchivo";
+                $rutaCompleta = "../$rutaRelativa";
+
+                if (move_uploaded_file($tmpName, $rutaCompleta)) {
+                    $stmtImagen->execute([$id_propiedad, $rutaRelativa]);
+                }
+            }
+        }
+
         header("Location: index.php");
         exit();
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -57,9 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../CSS/estilos.css">
     <link rel="stylesheet" href="../CSS/formulario.css">
-
 </head>
-
 
 <body>
     <header>
@@ -71,11 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="login.php"><button class="btn-login">Iniciar Sesión</button></a>
         <?php endif; ?>
     </header>
-
-
-
     <div class="menu-container">
-        <!-- Este es el menú oficial, abajo del título -->
         <div id="menu-navegacion">
             <nav class="nav-separado">
                 <a href="index.php">Inicio</a>
@@ -86,15 +109,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </nav>
         </div>
     </div>
-
     <?php include 'menu.php'; ?>
     <main class="form-container">
         <h2>Publicar una Propiedad</h2>
-        <?php if (isset($errores['sesion'])): ?>
-            <p class="error"><?= $errores['sesion'] ?></p>
-        <?php endif; ?>
-
-        <form action="vender.php" method="POST">
+        <?php if (isset($errores['sesion'])): ?><p class="error"><?= $errores['sesion'] ?></p><?php endif; ?>
+        <form action="vender.php" method="POST" enctype="multipart/form-data">
             <label>Tipo de Propiedad:</label>
             <select name="tipo_propiedad" class="<?= isset($errores['tipo_propiedad']) ? 'input-error' : '' ?>">
                 <option value="">Seleccionar</option>
@@ -130,6 +149,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label>Precio:</label>
             <input type="number" step="0.01" name="precio" value="<?= $datos['precio'] ?>" class="<?= isset($errores['precio']) ? 'input-error' : '' ?>">
             <?php if (isset($errores['precio'])): ?><span class="error"><?= $errores['precio'] ?></span><?php endif; ?>
+
+            <label>Imágenes (al menos 5):</label>
+            <input type="file" name="imagenes[]" multiple accept="image/*" class="<?= isset($errores['imagenes']) ? 'input-error' : '' ?>">
+            <?php if (isset($errores['imagenes'])): ?><span class="error"><?= $errores['imagenes'] ?></span><?php endif; ?>
 
             <button type="submit">Publicar Propiedad</button>
         </form>
