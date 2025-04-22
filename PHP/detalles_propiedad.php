@@ -14,7 +14,14 @@ if ($id_propiedad > 0) {
     }
 
     // Obtener imágenes reales
-    $imagenes = explode(',', $propiedad['imagenes']);
+    // Obtener imágenes reales desde la tabla imagenes_propiedad
+    $stmt_imgs = $pdo->prepare("SELECT ruta_imagen FROM imagenes_propiedad WHERE id_propiedad = ?");
+    $stmt_imgs->execute([$id_propiedad]);
+    $imagenes = $stmt_imgs->fetchAll(PDO::FETCH_COLUMN);
+
+    if (empty($imagenes)) {
+        $imagenes = ['../imagenes/imagen_defecto.jpg']; // Imagen por defecto si no hay imágenes
+    }
 } else {
     echo "ID de propiedad no válido.";
     exit;

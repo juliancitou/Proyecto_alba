@@ -1,0 +1,45 @@
+CREATE DATABASE proyecto_alba;
+
+CREATE TABLE usuarios (
+    id_usuario SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20),
+    edad INTEGER,
+    correo VARCHAR(100) UNIQUE NOT NULL,
+    direccion TEXT,
+    curp VARCHAR(18),
+    contraseña TEXT NOT NULL,
+    rol VARCHAR(20) NOT NULL CHECK (rol IN ('admin', 'vendedor', 'comprador'))
+);
+
+
+CREATE TABLE propiedades (
+    id_propiedad SERIAL PRIMARY KEY,
+    tipo_propiedad VARCHAR(20) NOT NULL CHECK (tipo_propiedad IN ('casa', 'terreno')),
+    id_vendedor INTEGER REFERENCES usuarios(id_usuario),
+    direccion TEXT NOT NULL,
+    pais VARCHAR(50),
+    estado VARCHAR(50),
+    municipio VARCHAR(50),
+    metros_cuadrados NUMERIC NOT NULL,
+    descripcion TEXT,
+    precio NUMERIC NOT NULL,
+    estado_propiedad VARCHAR(20) DEFAULT 'disponible' CHECK (estado_propiedad IN ('disponible', 'vendida', 'rentada')),
+    fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE historial_transacciones (
+    id_transaccion SERIAL PRIMARY KEY,
+    id_propiedad INTEGER REFERENCES propiedades(id_propiedad),
+    id_comprador INTEGER REFERENCES usuarios(id_usuario),
+    fecha_transaccion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo_transaccion VARCHAR(20) CHECK (tipo_transaccion IN ('venta', 'renta')),
+    precio_final NUMERIC,
+    porcentaje_admin NUMERIC DEFAULT 0.05,
+    ganancia_admin NUMERIC GENERATED ALWAYS AS (precio_final * porcentaje_admin) STORED
+);
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+
