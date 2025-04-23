@@ -1,0 +1,87 @@
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #ffffff, #ffffff);
+        }
+
+        .top-bar {
+            background-color: #050505;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+
+        .top-bar .logo-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .top-bar img {
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .top-bar h2 {
+            color: white;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .btn-volver {
+            background-color: #FFD966;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-volver:hover {
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #faf8f8;
+            border-radius: 12px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #222;
+        }
+
+        form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        form input[type="submit"] {
+            background-color: #F28D52;
+            color: rgb(214, 214, 214);
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #FFD966;
+            color: black;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+        }

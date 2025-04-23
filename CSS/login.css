@@ -1,230 +1,88 @@
-/* Estilos generales */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7; /* Fondo neutro */
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fff;
 }
 
-header {
-    background-color: #000000; /* Negro */
-    padding: 20px 30px;
-    color: white;
+.top-bar {
+    background-color: #F28D52;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    margin: 0; /* Eliminar el borde blanco */
+    padding: 15px 30px;
 }
 
-header h2 {
-    font-size: 30px;
-    font-weight: bold;
+.top-bar .logo-section {
+    display: flex;
+    align-items: center;
 }
 
-header img {
-    width: 50px; /* Ajusta el tamaño de la imagen */
-    height: auto;
-    border-radius: 50%;
+.top-bar img {
+    height: 40px;
     margin-right: 15px;
 }
 
-/* Botón Regresar en la parte superior izquierda */
-.btn-regresar-header {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #F9A826; /* Naranja claro */
+.top-bar h2 {
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
+    margin: 0;
+    font-size: 24px;
 }
 
-.btn-regresar-header:hover {
-    background-color: #F28D52; /* Naranja oscuro */
-}
-
-/* Contenedor principal */
-main {
+.registro-text {
     text-align: center;
-    padding: 50px 20px;
+    margin-top: 30px;
+    font-size: 28px;
+    color: #222;
+    font-weight: bold;
+}
+
+.btn-volver {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 25px;
+    background-color: #FFD966;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    text-align: center;
+    width: fit-content;
+}
+
+.btn-volver:hover {
+    background-color: #F28D52;
+    color: white;
 }
 
 .container {
-    background-color: #ffffff; /* Fondo blanco del formulario */
-    padding: 40px 50px;
-    border-radius: 15px;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 100%;
     max-width: 400px;
+    margin: auto;
+    padding: 30px;
 }
 
-h1 {
-    margin-bottom: 30px;
-    font-size: 28px;
-    color: #222626;
-}
-
-/* Formulario */
-form {
-    margin: 0;
-}
-
-/* Campos de entrada */
-input[type="email"],
-input[type="password"] {
+form input {
     width: 100%;
     padding: 12px;
-    font-size: 16px;
-    border: 1px solid #CCCCCC;
+    margin-bottom: 15px;
     border-radius: 8px;
-    background-color: #ffffff;
-    color: #222626;
-    outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    margin-bottom: 20px;
-}
-
-/* Enfoque de campos de entrada */
-input[type="email"]:focus,
-input[type="password"]:focus {
-    border-color: #F9A826; /* Naranja claro */
-    box-shadow: 0px 0px 5px #F9A826;
-}
-
-/* Botón de inicio de sesión */
-input[type="submit"] {
-    width: 100%;
-    padding: 14px;
-    font-size: 18px;
-    font-weight: bold;
-    background-color: #F9A826; /* Naranja claro */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-input[type="submit"]:hover {
-    background-color: #F28D52; /* Naranja oscuro */
-    transform: scale(1.03);
-}
-
-/* Línea separadora */
-hr {
-    border: 0;
-    border-top: 1px solid #F9A826; /* Naranja claro */
-    margin: 20px 0;
-}
-
-/* Mensajes de error */
-.error {
-    color: #F27B50; /* Naranja claro */
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-/* Botón Registrarse */
-.btn-regresar {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #F9A826; /* Naranja claro */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    display: block; /* Cambié esto para que se acomode bien dentro del contenedor */
-    margin-top: 20px; /* Agregué margen para separarlo del formulario */
-}
-
-.btn-regresar:hover {
-    background-color: #F28D52; /* Naranja oscuro */
-}
-
-/* Estilos generales para centrar el contenido */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #fff; /* Blanco */
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    text-align: center;
-    margin-top: 50px;
-}
-
-header .logo {
-    width: 200px;
-}
-
-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-}
-
-.container {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-h1 {
-    color: #333;
-}
-
-input[type="email"], input[type="password"], input[type="submit"], button {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 16px;
 }
 
-input[type="submit"], button {
-    background-color: #FF7F50; /* Naranja claro */
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover, button:hover {
-    background-color: #ff9f70; /* Naranja más claro */
-}
-
-hr {
-    margin: 20px 0;
-    border: 0;
-    border-top: 1px solid #ddd;
-}
-
-.btn-regresar {
-    text-decoration: none;
-    color: #FF7F50; /* Naranja claro */
+form input[type="submit"] {
+    background-color: #F28D52;
+    color: white;
     font-weight: bold;
-    display: inline-block;
-    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+form input[type="submit"]:hover {
+    background-color: #FFD966;
+    color: #000;
 }
 
 .error {
+    text-align: center;
     color: red;
-    font-size: 14px;
-    margin-top: 10px;
 }
