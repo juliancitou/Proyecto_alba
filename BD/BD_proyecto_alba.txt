@@ -42,4 +42,17 @@ CREATE TABLE historial_transacciones (
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+CREATE TABLE imagenes_propiedad (
+    id_imagen SERIAL PRIMARY KEY,
+    id_propiedad INT NOT NULL,
+    ruta_imagen VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id_propiedad) REFERENCES propiedades(id_propiedad) ON DELETE CASCADE
+);
+
+ALTER TABLE usuarios ADD COLUMN fecha_registro DATE DEFAULT CURRENT_DATE;
+
+ALTER TABLE usuarios ADD COLUMN foto_perfil VARCHAR(255) DEFAULT 'imagen_default.png';
+
+
+
 
