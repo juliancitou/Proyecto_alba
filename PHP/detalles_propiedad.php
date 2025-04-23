@@ -13,14 +13,20 @@ if ($id_propiedad > 0) {
         exit;
     }
 
-    // Obtener imágenes reales
     // Obtener imágenes reales desde la tabla imagenes_propiedad
     $stmt_imgs = $pdo->prepare("SELECT ruta_imagen FROM imagenes_propiedad WHERE id_propiedad = ?");
     $stmt_imgs->execute([$id_propiedad]);
-    $imagenes = $stmt_imgs->fetchAll(PDO::FETCH_COLUMN);
+    $imagenes_crudas = $stmt_imgs->fetchAll(PDO::FETCH_COLUMN);
 
+    // Anteponer "../" a cada imagen como en index.php
+    $imagenes = [];
+    foreach ($imagenes_crudas as $img) {
+        $imagenes[] = "../" . $img;
+    }
+
+    // Si no hay imágenes, usar una imagen por defecto
     if (empty($imagenes)) {
-        $imagenes = ['../imagenes/imagen_defecto.jpg']; // Imagen por defecto si no hay imágenes
+        $imagenes = ['../imagenes/imagen_defecto.jpg'];
     }
 } else {
     echo "ID de propiedad no válido.";
@@ -30,14 +36,12 @@ if ($id_propiedad > 0) {
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>Detalles de la Propiedad</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../CSS/estilo_detalles_prpiedad.css">
 </head>
-
 <body>
 
     <div class="encabezado">
@@ -67,7 +71,7 @@ if ($id_propiedad > 0) {
             <p><strong>Precio:</strong> $<?= number_format($propiedad['precio'], 2) ?></p>
             <p><strong>Estado:</strong> <?= $propiedad['estado'] === 'vendido' ? 'Vendido' : 'Disponible' ?></p>
             <p><strong>Metros Cuadrados:</strong> <?= htmlspecialchars($propiedad['metros_cuadrados']) ?> m²</p>
-            <p><strong>Ubicación:</strong> <?= htmlspecialchars($propiedad['pais'] . ', ' . $propiedad['estado_ubicacion'] . ', ' . $propiedad['municipio']) ?></p>
+            <p><strong>Ubicación:</strong> <?= htmlspecialchars($propiedad['pais'] . ', ' . $propiedad['estado_propiedad'] . ', ' . $propiedad['municipio']) ?></p>
 
             <button class="btn-comprar">Comprar</button>
         </div>
@@ -93,5 +97,4 @@ if ($id_propiedad > 0) {
     </script>
 
 </body>
-
 </html>
