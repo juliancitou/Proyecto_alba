@@ -73,7 +73,7 @@ if ($id_propiedad > 0) {
             <p><strong>Metros Cuadrados:</strong> <?= htmlspecialchars($propiedad['metros_cuadrados']) ?> m²</p>
             <p><strong>Ubicación:</strong> <?= htmlspecialchars($propiedad['pais'] . ', ' . $propiedad['estado_propiedad'] . ', ' . $propiedad['municipio']) ?></p>
 
-            <button class="btn-comprar">Comprar</button>
+            <button class="btn-comprar"; href="https://api.whatsapp.com/send?phone=4811036018">Contactar</button>
         </div>
     </div>
 
