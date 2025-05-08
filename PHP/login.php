@@ -78,8 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         .btn-volver {
-            display: block;
-            margin: 20px auto;
+            margin: 20px 30px;
             padding: 10px 25px;
             background-color: #FFD966;
             color: #000;
@@ -87,8 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             border-radius: 8px;
             font-size: 16px;
             text-decoration: none;
-            text-align: center;
-            width: fit-content;
+            display: inline-block;
         }
 
         .btn-volver:hover {
@@ -127,7 +125,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             text-align: center;
             color: red;
         }
+
+        .show-password {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .show-password input[type="checkbox"] {
+            transform: scale(1.2);
+        }
     </style>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        }
+    </script>
 </head>
 <body>
     <div class="top-bar">
@@ -135,17 +152,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <img src="../imagenes/logo_empresa.jpg" alt="Logo">
             <h2>MiEmpresa</h2>
         </div>
-        <!-- Parte superior derecha vacía -->
     </div>
-
-    <div class="registro-text">Inicio de sesión</div>
 
     <a href="index.php" class="btn-volver">Volver al inicio</a>
 
+    <div class="registro-text">Inicio de sesión</div>
+
     <div class="container">
-        <form method="POST" action="login.php">
-            <input type="email" name="correo" placeholder="Correo electrónico" required>
-            <input type="password" name="contraseña" placeholder="Contraseña" required>
+        <form method="POST" action="login.php" autocomplete="off">
+            <input type="email" name="correo" placeholder="Correo electrónico" required autocomplete="off">
+            <input type="password" name="contraseña" placeholder="Contraseña" id="password" required autocomplete="new-password">
+
+            <div class="show-password">
+                <input type="checkbox" onclick="togglePassword()" id="togglePass">
+                <label for="togglePass">Mostrar contraseña</label>
+            </div>
+
             <input type="submit" value="Iniciar sesión">
         </form>
 
