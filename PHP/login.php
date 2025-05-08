@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if ($usuario && password_verify($password, $usuario["contrasena"])) {
-        $_SESSION["usuario"] = $usuario;
+        $_SESSION['usuario'] = $usuario;
         $_SESSION["tipo"] = $tipo;
         header("Location: index.php");
         exit();
