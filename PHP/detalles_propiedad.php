@@ -1,7 +1,10 @@
 <?php
 require_once 'base_de_datos.php';
+session_start(); // <-- Esto es lo que faltaba
 
 $id_propiedad = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+// Resto del código...
 
 if ($id_propiedad > 0) {
     $stmt = $pdo->prepare("SELECT * FROM propiedades WHERE id_propiedad = ?");

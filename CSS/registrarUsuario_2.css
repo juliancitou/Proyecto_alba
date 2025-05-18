@@ -1,0 +1,29 @@
+label {
+    display: block;
+    margin-top: 10px;
+}
+.invalid {
+    color: red;
+}
+.valid {
+    color: green;
+}
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.btn-volver {
+    background-color: orange;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+.password-toggle {
+    display: flex;
+    align-items: center;
+}
+.password-toggle input[type="checkbox"] {
+    margin-left: 10px;
+}
