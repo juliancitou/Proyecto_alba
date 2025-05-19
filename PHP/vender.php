@@ -49,6 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $id_propiedad = $pdo->lastInsertId();
 
+        // Verificar si el usuario es "comprador" y actualizar a "vendedor"
+        if ($_SESSION['usuario']['rol'] === 'comprador') {
+            $stmtRol = $pdo->prepare("UPDATE usuarios SET rol = 'vendedor' WHERE id_usuario = ?");
+            $stmtRol->execute([$_SESSION['usuario']['id_usuario']]);
+
+            // Actualizar el rol en la sesión
+            $_SESSION['usuario']['rol'] = 'vendedor';
+        }
+
+
         $directorio = "../imagenes_propiedades/$id_propiedad";
         if (!is_dir($directorio)) {
             mkdir($directorio, 0777, true);

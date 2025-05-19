@@ -1,14 +1,27 @@
-<?php 
+<?php
 session_start();
-require_once 'base_de_datos.php'; // Incluye la conexión a la base de datos
+require_once 'base_de_datos.php'; // Conexión usando PDO
 
-// Obtener propiedades (limitadas a 3 como en tu código)
+// Si el usuario está logueado, actualizamos su información con el rol real desde la base
+if (isset($_SESSION['id_usuario'])) {
+    $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id_usuario = ?");
+    $stmt->execute([$_SESSION['id_usuario']]);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($usuario) {
+        $_SESSION['usuario'] = $usuario; // Guardamos todos sus datos
+        $_SESSION['rol'] = $usuario['rol']; // Por si no estaba
+    }
+}
+
+// Obtener propiedades (limitadas a 3)
 $stmt = $pdo->query("SELECT * FROM propiedades LIMIT 3");
 $propiedades = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Bienvenido a InmueblesFáciles</title>
@@ -16,14 +29,21 @@ $propiedades = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../CSS/estilos.css">
 </head>
+
 <body>
     <header>
         <div class="d-flex align-items-center">
             <img src="../imagenes/logo_empresa.jpg" alt="Logo" class="logo-img">
             <h2>InmueblesFáciles</h2>
         </div>
+
         <?php if (!isset($_SESSION['usuario'])): ?>
             <a href="login.php"><button class="btn-login">Iniciar Sesión</button></a>
+        <?php else: ?>
+            <div class="ms-auto me-3 d-flex align-items-center">
+                <span>Hola, <?= htmlspecialchars($_SESSION['usuario']['nombre'] . ' ' . $_SESSION['usuario']['apellidos']) ?></span>
+                <a href="logout.php" class="btn btn-sm btn-outline-secondary ms-3">Cerrar sesión</a>
+            </div>
         <?php endif; ?>
     </header>
 
@@ -32,7 +52,7 @@ $propiedades = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <nav class="nav-separado">
                 <a href="index.php">Inicio</a>
                 <a href="vender.php">Vender</a>
-                <a href="ultima_visita.php">Seguir Comprando</a>
+                <a href="panel_vendedor.php">Propiedades</a>
                 <a href="detallesCuenta.php">Cuenta</a>
                 <a href="menu.php">Menú</a>
             </nav>
@@ -46,13 +66,10 @@ $propiedades = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <main>
         <div class="container">
-            <?php foreach ($propiedades as $propiedad): 
-                // Obtener UNA imagen de la propiedad desde la tabla imagenes_propiedad
+            <?php foreach ($propiedades as $propiedad):
                 $stmtImg = $pdo->prepare("SELECT ruta_imagen FROM imagenes_propiedad WHERE id_propiedad = ? LIMIT 1");
                 $stmtImg->execute([$propiedad['id_propiedad']]);
                 $imagen = $stmtImg->fetchColumn();
-
-                // Si no hay imagen, usar una imagen por defecto
                 $ruta_imagen = $imagen ? "../$imagen" : "../imagenes/default.jpg";
             ?>
                 <div class="propiedad-card row mb-4" id="propiedad_<?= $propiedad['id_propiedad'] ?>">
@@ -69,5 +86,7 @@ $propiedades = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </div>
     </main>
+
 </body>
+
 </html>
