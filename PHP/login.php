@@ -2,6 +2,7 @@
 session_start();
 include_once "base_de_datos.php";
 
+// Lógica de inicio de sesión
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $correo = $_POST["correo"];
     $password = $_POST["contraseña"];
@@ -34,12 +35,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../CSS/login_2.css">
-
     <script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');
@@ -47,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     </script>
 </head>
+
 <body>
     <div class="top-bar">
         <div class="logo-section">
@@ -56,6 +58,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
 
     <a href="index.php" class="btn-volver">Volver al inicio</a>
+
+    <?php if (isset($_SESSION['usuario'])): ?>
+        <?php
+        $rolTexto = ($_SESSION['tipo'] === "usuario") ? $_SESSION['usuario']['rol'] : "empresa";
+        $idTexto = $_SESSION['tipo'] === "usuario" ? $_SESSION['usuario']['id_usuario'] : $_SESSION['usuario']['rfc'];
+        ?>
+        <div class="user-info" style="margin: 20px; padding: 10px; background-color: #f5f5f5; border: 1px solid #ccc;">
+            <strong>Sesión iniciada:</strong><br>
+            Rol: <b><?= htmlspecialchars($rolTexto) ?></b><br>
+            ID: <b><?= htmlspecialchars($idTexto) ?></b><br>
+            Nombre: <b><?= htmlspecialchars($_SESSION['usuario']['nombre']) ?></b>
+        </div>
+    <?php endif; ?>
+
 
     <div class="registro-text">Inicio de sesión</div>
 
@@ -79,4 +95,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </form>
     </div>
 </body>
+
 </html>
