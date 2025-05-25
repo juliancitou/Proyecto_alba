@@ -4,34 +4,45 @@ include_once "base_de_datos.php";
 
 // Lógica de inicio de sesión
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $correo = $_POST["correo"];
-    $password = $_POST["contraseña"];
+    $correo = $_POST["correo"] ?? '';
+    $password = $_POST["contraseña"] ?? ''; // Asegúrate que tu formulario HTML tenga 'name="contraseña"'
 
+    if (empty($correo) || empty($password)) {
+        echo "<div class='error'>Por favor, complete todos los campos.</div>";
+        exit();
+    }
+
+    // Buscar primero en tabla de usuarios
     $sqlUsuarios = "SELECT * FROM usuarios WHERE correo = :correo";
     $stmtUsuarios = $pdo->prepare($sqlUsuarios);
     $stmtUsuarios->execute([":correo" => $correo]);
     $usuario = $stmtUsuarios->fetch(PDO::FETCH_ASSOC);
 
-    if (!$usuario) {
-        $sqlEmpresas = "SELECT rfc, nombre, correo, direccion, contrasena FROM empresas WHERE correo = :correo";
-        $stmtEmpresas = $pdo->prepare($sqlEmpresas);
-        $stmtEmpresas->execute([":correo" => $correo]);
-        $usuario = $stmtEmpresas->fetch(PDO::FETCH_ASSOC);
-        $tipo = "empresa";
-    } else {
-        $tipo = "usuario";
-    }
-
     if ($usuario && password_verify($password, $usuario["contrasena"])) {
         $_SESSION['usuario'] = $usuario;
-        $_SESSION["tipo"] = $tipo;
+        $_SESSION["tipo"] = "usuario";
         header("Location: index.php");
         exit();
-    } else {
-        echo "<div class='error'>Credenciales incorrectas.</div>";
     }
+
+    // Si no se encontró o contraseña incorrecta, buscar en empresas
+    $sqlEmpresas = "SELECT rfc, nombre, correo, direccion, contrasena FROM empresas WHERE correo = :correo";
+    $stmtEmpresas = $pdo->prepare($sqlEmpresas);
+    $stmtEmpresas->execute([":correo" => $correo]);
+    $empresa = $stmtEmpresas->fetch(PDO::FETCH_ASSOC);
+
+    if ($empresa && password_verify($password, $empresa["contrasena"])) {
+        $_SESSION['usuario'] = $empresa;
+        $_SESSION["tipo"] = "empresa";
+        header("Location: index.php");
+        exit();
+    }
+
+    // Si llega aquí, usuario o empresa no válida
+    echo "<div class='error'>Credenciales incorrectas.</div>";
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -58,19 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
 
     <a href="index.php" class="btn-volver">Volver al inicio</a>
-
-    <?php if (isset($_SESSION['usuario'])): ?>
-        <?php
-        $rolTexto = ($_SESSION['tipo'] === "usuario") ? $_SESSION['usuario']['rol'] : "empresa";
-        $idTexto = $_SESSION['tipo'] === "usuario" ? $_SESSION['usuario']['id_usuario'] : $_SESSION['usuario']['rfc'];
-        ?>
-        <div class="user-info" style="margin: 20px; padding: 10px; background-color: #f5f5f5; border: 1px solid #ccc;">
-            <strong>Sesión iniciada:</strong><br>
-            Rol: <b><?= htmlspecialchars($rolTexto) ?></b><br>
-            ID: <b><?= htmlspecialchars($idTexto) ?></b><br>
-            Nombre: <b><?= htmlspecialchars($_SESSION['usuario']['nombre']) ?></b>
-        </div>
-    <?php endif; ?>
 
 
     <div class="registro-text">Inicio de sesión</div>

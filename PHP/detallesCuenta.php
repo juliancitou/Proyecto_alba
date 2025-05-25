@@ -74,7 +74,7 @@ if (isset($_FILES['foto_perfil']) && isset($_POST['cambiar_foto'])) {
         <nav class="nav-separado">
             <a href="index.php">Inicio</a>
             <a href="vender.php">Vender</a>
-            <a href="ultima_visita.php">Seguir Comprando</a>
+            <a href="panel_vendedor.php">Propiedades</a>
             <a href="detallesCuenta.php">Cuenta</a>
             <a href="menu.php">Menú</a>
         </nav>

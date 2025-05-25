@@ -104,21 +104,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <img src="../imagenes/logo_empresa.jpg" alt="Logo" class="logo-img">
             <h2>InmueblesFáciles</h2>
         </div>
+
         <?php if (!isset($_SESSION['usuario'])): ?>
             <a href="login.php"><button class="btn-login">Iniciar Sesión</button></a>
+        <?php else: ?>
+            <div class="ms-auto me-3 d-flex align-items-center">
+                <span>Hola, <?= htmlspecialchars($_SESSION['usuario']['nombre'] . ' ' . $_SESSION['usuario']['apellidos']) ?></span>
+                <a href="logout.php" class="btn btn-sm btn-outline-secondary ms-3">Cerrar sesión</a>
+            </div>
         <?php endif; ?>
     </header>
+
     <div class="menu-container">
         <div id="menu-navegacion">
             <nav class="nav-separado">
                 <a href="index.php">Inicio</a>
                 <a href="vender.php">Vender</a>
-                <a href="ultima_visita.php">Seguir Comprando</a>
+                <a href="panel_vendedor.php">Propiedades</a>
                 <a href="detallesCuenta.php">Cuenta</a>
                 <a href="menu.php">Menú</a>
             </nav>
         </div>
     </div>
+
     <?php include 'menu.php'; ?>
     <main class="form-container">
         <h2>Publicar una Propiedad</h2>

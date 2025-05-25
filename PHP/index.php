@@ -29,19 +29,6 @@ $propiedades = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../CSS/estilos.css">
 
-    <?php if (isset($_SESSION['usuario'])): ?>
-        <?php
-        $rolTexto = ($_SESSION['tipo'] === "usuario") ? $_SESSION['usuario']['rol'] : "empresa";
-        $idTexto = $_SESSION['tipo'] === "usuario" ? $_SESSION['usuario']['id_usuario'] : $_SESSION['usuario']['rfc'];
-        ?>
-        <div class="user-info" style="margin: 20px; padding: 10px; background-color: #f5f5f5; border: 1px solid #ccc;">
-            <strong>Sesión iniciada:</strong><br>
-            Rol: <b><?= htmlspecialchars($rolTexto) ?></b><br>
-            ID: <b><?= htmlspecialchars($idTexto) ?></b><br>
-            Nombre: <b><?= htmlspecialchars($_SESSION['usuario']['nombre']) ?></b>
-        </div>
-    <?php endif; ?>
-
 </head>
 
 <body>
